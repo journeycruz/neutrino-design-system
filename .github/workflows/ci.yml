@@ -17,6 +17,7 @@ jobs:
           node-version: 22
       - uses: pnpm/action-setup@v4
       - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm release:check
       - run: pnpm test:release
       - run: pnpm lint

@@ -8,7 +8,7 @@ Phases 3-6 confirm regression quality is strongest when visual, behavior, and ru
 - APG edge cases need explicit story-backed coverage (`Tabs` with disabled items and nested `Dialog` focus-return).
 - Release hardening should run as a first-class gate (`release:check`) alongside quality/build/consumer checks.
 - Prefer a curated critical-story set for Axe (`wcag2a`, `wcag2aa`) to keep CI stable while catching high-impact regressions.
-- Expanding the critical Axe set is safest when adding high-impact, low-flake static stories incrementally (for example nested dialog, native textarea composition, invalid select, and disabled toggle controls).
+- Expanding the critical Axe set is safest when adding high-impact, low-flake static stories incrementally (for example nested dialog, `FormField` valid/composed scenarios, invalid input/select states, disabled radio/select controls, and toast error state).
 - Form composition contracts are most stable when `FormField` respects child IDs and merges `aria-describedby` for native `input`/`textarea` usage.
 - Composed controls (`Input`/`Select`) should merge incoming `aria-describedby`/`aria-invalid` with their local hint/error semantics so `FormField` metadata does not erase control-level guidance.
 - Grouped controls (`Checkbox`/`Radio`) should merge incoming `aria-describedby` with local hint IDs to preserve both field-level and control-level guidance.

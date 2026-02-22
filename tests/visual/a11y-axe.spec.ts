@@ -8,12 +8,17 @@ const criticalStories = [
   "components-tabs--with-disabled",
   "components-formfield--invalid",
   "components-formfield--native-textarea",
+  "components-formfield--valid",
   "components-formfield--composed-input",
   "components-formfield--composed-checkbox",
   "components-formfield--composed-radio",
   "components-input--default",
+  "components-input--invalid",
   "components-select--invalid",
+  "components-select--disabled",
   "components-checkbox--disabled",
+  "components-radio--disabled",
+  "components-toast--error",
   "components-switch--disabled"
 ];
 
