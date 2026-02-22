@@ -7,6 +7,7 @@ Use this quick checklist to evaluate post-Phase-8 readiness and remaining releas
 - Keep CI enforcing `release:check` and visual regression workflow artifact capture on failures.
 - Verify component package remains export-map safe for both `import` and `require` consumers.
 - Confirm export-name diffs from `packages/components/src/index.ts` require a `.changeset` entry with a `## Exports` section.
+- Confirm release utility tests (`pnpm test:release`) cover export-diff edge cases and run in CI/release workflows.
 - Maintain Storybook interaction coverage for critical keyboard/focus flows including disabled Tabs and nested Dialog behavior.
 - Confirm expanded critical Axe stories remain green (`Dialog` nested static, `FormField` native textarea, `Select` invalid, disabled `Checkbox`/`Switch`).
 - Confirm `FormField` composition coverage for native `input` and `textarea` patterns remains green.

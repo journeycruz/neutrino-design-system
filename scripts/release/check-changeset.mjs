@@ -1,5 +1,6 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
+import { diffExportNames, formatNames, hasExportsSection } from "./check-changeset-utils.mjs";
 
 const run = (command, args) => {
   const result = spawnSync(command, args, { encoding: "utf8" });
@@ -8,30 +9,6 @@ const run = (command, args) => {
   }
   return result.stdout.trim();
 };
-
-const extractExportNames = (source) => {
-  const exportBlocks = [...source.matchAll(/export\s*\{([^}]*)\}/gms)];
-  const names = new Set();
-
-  for (const block of exportBlocks) {
-    const members = block[1]
-      .split(",")
-      .map((entry) => entry.trim())
-      .filter(Boolean);
-
-    for (const member of members) {
-      const normalized = member.replace(/^type\s+/, "");
-      const alias = normalized.split(/\s+as\s+/i).at(-1)?.trim();
-      if (alias) {
-        names.add(alias);
-      }
-    }
-  }
-
-  return names;
-};
-
-const formatNames = (values) => [...values].sort().join(", ");
 
 const readChangesetFiles = () =>
   readdirSync(".changeset")
@@ -88,18 +65,14 @@ if (baseExportsSource === null || headExportsSource === null) {
   process.exit(1);
 }
 
-const baseExports = extractExportNames(baseExportsSource);
-const headExports = extractExportNames(headExportsSource);
+const { added: addedExports, removed: removedExports, changed: exportsChanged } = diffExportNames(baseExportsSource, headExportsSource);
 
-const addedExports = [...headExports].filter((name) => !baseExports.has(name));
-const removedExports = [...baseExports].filter((name) => !headExports.has(name));
-
-if (addedExports.length === 0 && removedExports.length === 0) {
+if (!exportsChanged) {
   process.stdout.write("release:check passed (component index changed, public export names unchanged)\n");
   process.exit(0);
 }
 
-const hasExportReleaseNotes = changesets.some(({ content }) => /^##\s*Exports\b/im.test(content));
+const hasExportReleaseNotes = hasExportsSection(changesets);
 
 if (!hasExportReleaseNotes) {
   process.stderr.write("release:check failed: component export changes detected without a `## Exports` changeset section\n");
