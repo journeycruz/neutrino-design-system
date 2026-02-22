@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "build": "tsc --project tsconfig.json",
+    "chromatic": "chromatic",
     "lint": "tsc --project tsconfig.json --noEmit",
     "test": "node -e \"process.exit(0)\"",
+    "test-storybook": "vitest --config ./vitest.config.ts run",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
@@ -16,11 +18,19 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^5.0.1",
     "@storybook/addon-a11y": "^10.2.9",
     "@storybook/addon-docs": "^10.2.9",
+    "@storybook/addon-vitest": "^10.2.9",
     "@storybook/react-vite": "^10.2.9",
-    "storybook": "^10.2.9",
     "@types/react": "^19.0.12",
-    "@types/react-dom": "^19.0.5"
+    "@types/react-dom": "^19.0.5",
+    "@vitest/browser": "4.0.18",
+    "@vitest/browser-playwright": "4.0.18",
+    "@vitest/coverage-v8": "4.0.18",
+    "@vitest/runner": "4.0.18",
+    "chromatic": "^15.1.1",
+    "storybook": "^10.2.9",
+    "vitest": "4.0.18"
   }
 }
