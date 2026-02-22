@@ -11,6 +11,7 @@
     "release:dry-run": "node scripts/release/dry-run.mjs",
     "test:release": "node --test scripts/release/check-changeset.test.mjs",
     "test": "pnpm -r test",
+    "test:storybook": "pnpm --filter @neutrino/storybook test-storybook",
     "test:consumers": "node scripts/consumers-smoke.mjs",
     "test:a11y:axe": "pnpm storybook:build && playwright test --config playwright.config.ts tests/visual/a11y-axe.spec.ts",
     "test:a11y:regression": "pnpm storybook:build && playwright test --config playwright.config.ts tests/visual/a11y-regression.spec.ts",

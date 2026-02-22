@@ -23,6 +23,7 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
+      - run: pnpm test:storybook
       - run: pnpm storybook:build
       - run: pnpm test:a11y:regression
       - run: pnpm test:a11y:axe
