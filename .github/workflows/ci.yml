@@ -1,4 +1,5 @@
 name: CI
+# PR check branch validation: Storybook CI automation
 
 on:
   pull_request:
