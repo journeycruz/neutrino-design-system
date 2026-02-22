@@ -10,6 +10,7 @@ const criticalStories = [
   "components-formfield--native-textarea",
   "components-formfield--valid",
   "components-formfield--composed-input",
+  "components-formfield--composed-select",
   "components-formfield--composed-checkbox",
   "components-formfield--composed-radio",
   "components-input--default",

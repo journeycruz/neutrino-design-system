@@ -8,4 +8,4 @@ This category captures durable learnings and follow-up actions from the TypeScri
 - examples/validation-commands.md
 - errors/monorepo-pathing.md
 
-Reference: .tmp/sessions/2026-02-22-design-system-phase-3/context.md
+Reference: lookup/status-checklist.md

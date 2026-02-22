@@ -12,6 +12,7 @@ Phases 3-6 confirm regression quality is strongest when visual, behavior, and ru
 - Form composition contracts are most stable when `FormField` respects child IDs and merges `aria-describedby` for native `input`/`textarea` usage.
 - Composed controls (`Input`/`Select`) should merge incoming `aria-describedby`/`aria-invalid` with their local hint/error semantics so `FormField` metadata does not erase control-level guidance.
 - Grouped controls (`Checkbox`/`Radio`) should merge incoming `aria-describedby` with local hint IDs to preserve both field-level and control-level guidance.
+- Iteration 11 confirms composed `Select` scenarios should be covered in both critical Axe scans and keyboard/focus regression checks so field-level metadata merges remain stable end to end.
 - Release checks are more actionable when they compare public export names across refs and require explicit changeset export notes only when names change.
 - Release automation is safer when export-diff parsing and `## Exports` detection are covered by focused utility tests (`pnpm test:release`) in CI.
 - Final confidence comes from a full ordered gate run: `ci:check`, visual, a11y regression, axe, build, consumers, release check.

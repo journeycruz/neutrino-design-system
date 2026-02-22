@@ -72,3 +72,15 @@ test("nested dialog close restores focus to outer trigger", async ({ page }) => 
   await expect(page.getByRole("dialog", { name: "Inner dialog" })).toBeHidden();
   await expect(openInnerButton).toBeFocused();
 });
+
+test("formfield composed select keeps field and control describedby metadata", async ({ page }) => {
+  await page.goto("/iframe.html?id=components-formfield--composed-select&viewMode=story");
+  await page.waitForLoadState("networkidle");
+
+  const select = page.getByRole("combobox", { name: "Status" });
+  await expect(select).toHaveAttribute("aria-invalid", "true");
+
+  const describedBy = await select.getAttribute("aria-describedby");
+  expect(describedBy).toBeTruthy();
+  expect(describedBy?.split(" ").length).toBe(3);
+});

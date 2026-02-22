@@ -73,6 +73,21 @@ export const ComposedInput: Story = {
   )
 };
 
+export const ComposedSelect: Story = {
+  render: () => (
+    <FormField error="Field-level validation failed" hint="Field-level guidance" label="Status">
+      <Select
+        hint="Control-level helper"
+        label="Status"
+        options={[
+          { label: "Draft", value: "draft" },
+          { label: "Published", value: "published" }
+        ]}
+      />
+    </FormField>
+  )
+};
+
 export const ComposedCheckbox: Story = {
   render: () => (
     <FormField error="Field-level validation failed" hint="Field-level guidance" label="Newsletter">

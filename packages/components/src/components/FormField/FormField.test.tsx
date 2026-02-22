@@ -75,6 +75,27 @@ describe("FormField", () => {
     expect(describedBy.length).toBe(3);
   });
 
+  it("composes with Select hint semantics without dropping field-level metadata", () => {
+    render(
+      <FormField error="Field level error" hint="Field level hint" label="Status">
+        <Select
+          hint="Control hint"
+          label="Status"
+          options={[
+            { label: "Draft", value: "draft" },
+            { label: "Published", value: "published" }
+          ]}
+        />
+      </FormField>
+    );
+
+    const select = screen.getByRole("combobox", { name: "Status" });
+    const describedBy = select.getAttribute("aria-describedby")?.split(" ") ?? [];
+
+    expect(select).toHaveAttribute("aria-invalid", "true");
+    expect(describedBy.length).toBe(3);
+  });
+
   it("integrates with Checkbox and Radio controls", () => {
     render(
       <>
