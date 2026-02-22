@@ -1,0 +1,72 @@
+{
+  "component": {
+    "button": {
+      "fontFamily": { "$type": "fontFamily", "$value": "{typography.fontFamily.default}" },
+      "fontSize": { "$type": "dimension", "$value": "{typography.label.size}" },
+      "fontWeight": { "$type": "fontWeight", "$value": "{font.weight.semibold}" },
+      "height": {
+        "$type": "dimension",
+        "sm": { "$value": "{size.controlSm}" },
+        "md": { "$value": "{size.controlMd}" },
+        "lg": { "$value": "{size.controlLg}" }
+      },
+      "paddingX": {
+        "$type": "dimension",
+        "sm": { "$value": "{space.4}" },
+        "md": { "$value": "{space.5}" },
+        "lg": { "$value": "{space.6}" }
+      },
+      "radius": { "$type": "dimension", "$value": "{radius.md}" },
+      "background": {
+        "$type": "color",
+        "default": { "$value": "{color.background.brand}" },
+        "hover": { "$value": "{color.brand.700}" },
+        "active": { "$value": "{color.brand.800}" },
+        "disabled": { "$value": "{color.neutral.200}" }
+      },
+      "text": {
+        "$type": "color",
+        "default": { "$value": "{color.text.inverse}" },
+        "disabled": { "$value": "{color.neutral.500}" }
+      },
+      "focusRingColor": { "$type": "color", "$value": "{color.focusRing.outer}" }
+    },
+    "input": {
+      "fontFamily": { "$type": "fontFamily", "$value": "{typography.fontFamily.default}" },
+      "fontSize": { "$type": "dimension", "$value": "{typography.body.size}" },
+      "minHeight": { "$type": "dimension", "$value": "{size.controlMd}" },
+      "paddingX": { "$type": "dimension", "$value": "{space.4}" },
+      "paddingY": { "$type": "dimension", "$value": "{space.3}" },
+      "radius": { "$type": "dimension", "$value": "{radius.md}" },
+      "borderWidth": { "$type": "dimension", "$value": "{border.width.thin}" },
+      "borderColor": {
+        "$type": "color",
+        "default": { "$value": "{color.border.default}" },
+        "hover": { "$value": "{color.border.strong}" },
+        "focus": { "$value": "{color.border.focus}" },
+        "invalid": { "$value": "{color.border.danger}" }
+      },
+      "background": {
+        "$type": "color",
+        "default": { "$value": "{color.background.canvas}" },
+        "disabled": { "$value": "{color.neutral.100}" }
+      },
+      "textColor": { "$type": "color", "$value": "{color.text.default}" },
+      "placeholderColor": { "$type": "color", "$value": "{color.text.subtle}" }
+    },
+    "dialog": {
+      "backdrop": { "$type": "color", "$value": "#0b0e13a6" },
+      "surface": { "$type": "color", "$value": "{color.background.elevated}" },
+      "radius": { "$type": "dimension", "$value": "{radius.lg}" },
+      "shadow": { "$type": "shadow", "$value": "{shadow.lg}" },
+      "zIndex": { "$type": "number", "$value": "{zIndex.modal}" }
+    },
+    "tabs": {
+      "height": { "$type": "dimension", "$value": "{size.controlMd}" },
+      "gap": { "$type": "dimension", "$value": "{space.3}" },
+      "activeText": { "$type": "color", "$value": "{color.text.brand}" },
+      "inactiveText": { "$type": "color", "$value": "{color.text.subtle}" },
+      "indicator": { "$type": "color", "$value": "{color.brand.500}" }
+    }
+  }
+}

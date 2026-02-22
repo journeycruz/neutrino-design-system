@@ -1,0 +1,40 @@
+{
+  "name": "@neutrino/tokens",
+  "version": "0.0.0",
+  "private": false,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./tokens.css": "./dist/tokens.css",
+    "./primitives.css": "./dist/primitives.css",
+    "./semantic.css": "./dist/semantic.css",
+    "./components.css": "./dist/components.css",
+    "./theme-light.css": "./dist/theme-light.css",
+    "./theme-dark.css": "./dist/theme-dark.css",
+    "./theme-high-contrast.css": "./dist/theme-high-contrast.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "tokens:lint": "node scripts/validate-tokens.mjs",
+    "lint": "tsc --project tsconfig.json --noEmit",
+    "test": "node -e \"process.exit(0)\"",
+    "typecheck": "tsc --project tsconfig.json --noEmit"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "devDependencies": {
+    "style-dictionary": "^5.3.2"
+  }
+}

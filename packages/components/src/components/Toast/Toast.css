@@ -1,0 +1,60 @@
+.ns-toast {
+  align-items: flex-start;
+  background: #ffffff;
+  border: 1px solid var(--ns-color-border-default, #d8dde5);
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 24px -12px #091f4533;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr auto auto;
+  max-width: 30rem;
+  padding: 0.875rem 1rem;
+}
+
+.ns-toast-content {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.ns-toast-title {
+  font-weight: 600;
+  margin: 0;
+}
+
+.ns-toast-description {
+  color: var(--ns-color-text-subtle, #3f4755);
+  margin: 0;
+}
+
+.ns-toast--success {
+  border-color: #1f8f4f;
+}
+
+.ns-toast--warning {
+  border-color: #b98000;
+}
+
+.ns-toast--error {
+  border-color: #ca2b30;
+}
+
+.ns-toast--info {
+  border-color: var(--ns-component-button-background-default, #1f6fff);
+}
+
+.ns-toast-action,
+.ns-toast-dismiss {
+  align-self: center;
+  background: transparent;
+  border: 0;
+  color: var(--ns-component-button-background-default, #1f6fff);
+  cursor: pointer;
+  font: inherit;
+  padding: 0.25rem;
+}
+
+.ns-toast-dismiss:focus-visible,
+.ns-toast-action:focus-visible {
+  box-shadow: 0 0 0 3px var(--ns-color-focusRing-outer, #87b8ff);
+  outline: none;
+}

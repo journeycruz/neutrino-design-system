@@ -1,0 +1,37 @@
+{
+  "name": "neutrino-design-system",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.30.1+sha512.3590e550d5384caa39bd5c7c739f72270234b2f6059e13018f975c313b1eb9fefcc09714048765d4d9efe961382c312e624572c0420762bdc5d5940cdf9be73a",
+  "scripts": {
+    "build": "pnpm -r build",
+    "ci:check": "pnpm lint && pnpm typecheck && pnpm test && pnpm storybook:build",
+    "lint": "pnpm -r lint",
+    "release:check": "node scripts/release/check-changeset.mjs",
+    "release:dry-run": "node scripts/release/dry-run.mjs",
+    "test": "pnpm -r test",
+    "test:consumers": "node scripts/consumers-smoke.mjs",
+    "test:a11y:axe": "pnpm storybook:build && playwright test --config playwright.config.ts tests/visual/a11y-axe.spec.ts",
+    "test:a11y:regression": "pnpm storybook:build && playwright test --config playwright.config.ts tests/visual/a11y-regression.spec.ts",
+    "test:visual": "pnpm storybook:build && playwright test --config playwright.config.ts tests/visual/components.spec.ts",
+    "test:visual:update": "pnpm storybook:build && playwright test --config playwright.config.ts tests/visual/components.spec.ts --update-snapshots",
+    "typecheck": "pnpm -r typecheck",
+    "storybook": "pnpm --filter @neutrino/storybook storybook",
+    "storybook:build": "pnpm --filter @neutrino/storybook build-storybook"
+  },
+  "devDependencies": {
+    "@neutrino/components": "workspace:*",
+    "@neutrino/tokens": "workspace:*",
+    "@changesets/cli": "^2.29.7",
+    "@types/node": "^24.3.0",
+    "@playwright/test": "^1.58.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "axe-core": "^4.11.0",
+    "jsdom": "^27.0.1",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.7"
+  }
+}

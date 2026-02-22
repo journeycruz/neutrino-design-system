@@ -1,0 +1,46 @@
+.ns-button {
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: var(--ns-component-button-radius, 0.5rem);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--ns-component-button-fontFamily, Inter, sans-serif);
+  font-size: var(--ns-component-button-fontSize, 0.875rem);
+  font-weight: var(--ns-component-button-fontWeight, 600);
+  height: var(--ns-component-button-height-md, 2.5rem);
+  justify-content: center;
+  padding: 0 var(--ns-component-button-paddingX-md, 1rem);
+  text-decoration: none;
+  transition: background-color 120ms ease, color 120ms ease, box-shadow 120ms ease;
+}
+
+.ns-button:focus-visible {
+  box-shadow: 0 0 0 3px var(--ns-component-button-focusRingColor, #87b8ff);
+  outline: none;
+}
+
+.ns-button--primary {
+  background: var(--ns-component-button-background-default, #1f6fff);
+  color: var(--ns-component-button-text-default, #ffffff);
+}
+
+.ns-button--primary:hover {
+  background: var(--ns-component-button-background-hover, #1243a1);
+}
+
+.ns-button--primary:active {
+  background: var(--ns-component-button-background-active, #0d3071);
+}
+
+.ns-button--secondary {
+  background: transparent;
+  border-color: var(--ns-color-border-default, #d8dde5);
+  color: var(--ns-color-text-default, #171b22);
+}
+
+.ns-button:disabled {
+  background: var(--ns-component-button-background-disabled, #d8dde5);
+  color: var(--ns-component-button-text-disabled, #728096);
+  cursor: not-allowed;
+  opacity: var(--ns-opacity-disabled, 0.45);
+}

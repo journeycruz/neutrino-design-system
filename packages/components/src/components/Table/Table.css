@@ -1,0 +1,46 @@
+.ns-table-wrap {
+  overflow-x: auto;
+}
+
+.ns-table {
+  border-collapse: collapse;
+  color: var(--ns-color-text-default, #171b22);
+  width: 100%;
+}
+
+.ns-table-caption {
+  caption-side: top;
+  color: var(--ns-color-text-subtle, #3f4755);
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+.ns-table-cell {
+  border-bottom: 1px solid var(--ns-color-border-default, #d8dde5);
+  padding: 0.75rem;
+}
+
+.ns-table thead .ns-table-cell {
+  font-weight: 600;
+}
+
+.ns-table-cell--left {
+  text-align: left;
+}
+
+.ns-table-cell--center {
+  text-align: center;
+}
+
+.ns-table-cell--right {
+  text-align: right;
+}
+
+.ns-table--striped tbody tr:nth-child(even) {
+  background: #f7f9fc;
+}
+
+.ns-table--dense .ns-table-cell {
+  padding: 0.5rem;
+}

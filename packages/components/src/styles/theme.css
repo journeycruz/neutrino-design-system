@@ -1,0 +1,60 @@
+@import "@neutrino/tokens/tokens.css";
+
+.ns-root {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--ns-color-text-default, #171b22);
+  background-color: var(--ns-color-background-canvas, #ffffff);
+}
+
+.ns-root[data-theme="dark"] {
+  --ns-color-text-default: var(--ns-color-modes-dark-text-default);
+  --ns-color-text-subtle: var(--ns-color-modes-dark-text-subtle);
+  --ns-color-text-inverse: var(--ns-color-modes-dark-text-inverse);
+  --ns-color-text-brand: var(--ns-color-modes-dark-text-brand);
+  --ns-color-text-danger: var(--ns-color-modes-dark-text-danger);
+  --ns-color-text-success: var(--ns-color-modes-dark-text-success);
+  --ns-color-text-warning: var(--ns-color-modes-dark-text-warning);
+  --ns-color-text-info: var(--ns-color-modes-dark-text-info);
+  --ns-color-background-canvas: var(--ns-color-modes-dark-background-canvas);
+  --ns-color-background-surface: var(--ns-color-modes-dark-background-surface);
+  --ns-color-background-elevated: var(--ns-color-modes-dark-background-elevated);
+  --ns-color-background-brand: var(--ns-color-modes-dark-background-brand);
+  --ns-color-background-danger: var(--ns-color-modes-dark-background-danger);
+  --ns-color-background-success: var(--ns-color-modes-dark-background-success);
+  --ns-color-background-warning: var(--ns-color-modes-dark-background-warning);
+  --ns-color-background-info: var(--ns-color-modes-dark-background-info);
+  --ns-color-border-default: var(--ns-color-modes-dark-border-default);
+  --ns-color-border-strong: var(--ns-color-modes-dark-border-strong);
+  --ns-color-border-brand: var(--ns-color-modes-dark-border-brand);
+  --ns-color-border-focus: var(--ns-color-modes-dark-border-focus);
+  --ns-color-border-danger: var(--ns-color-modes-dark-border-danger);
+  --ns-color-focusRing-outer: var(--ns-color-modes-dark-focusRing-outer);
+  --ns-color-focusRing-inner: var(--ns-color-modes-dark-focusRing-inner);
+}
+
+.ns-root[data-theme="high-contrast"],
+.ns-root[data-contrast="high"] {
+  --ns-color-text-default: var(--ns-color-modes-highContrast-text-default);
+  --ns-color-text-subtle: var(--ns-color-modes-highContrast-text-subtle);
+  --ns-color-text-inverse: var(--ns-color-modes-highContrast-text-inverse);
+  --ns-color-text-brand: var(--ns-color-modes-highContrast-text-brand);
+  --ns-color-text-danger: var(--ns-color-modes-highContrast-text-danger);
+  --ns-color-text-success: var(--ns-color-modes-highContrast-text-success);
+  --ns-color-text-warning: var(--ns-color-modes-highContrast-text-warning);
+  --ns-color-text-info: var(--ns-color-modes-highContrast-text-info);
+  --ns-color-background-canvas: var(--ns-color-modes-highContrast-background-canvas);
+  --ns-color-background-surface: var(--ns-color-modes-highContrast-background-surface);
+  --ns-color-background-elevated: var(--ns-color-modes-highContrast-background-elevated);
+  --ns-color-background-brand: var(--ns-color-modes-highContrast-background-brand);
+  --ns-color-background-danger: var(--ns-color-modes-highContrast-background-danger);
+  --ns-color-background-success: var(--ns-color-modes-highContrast-background-success);
+  --ns-color-background-warning: var(--ns-color-modes-highContrast-background-warning);
+  --ns-color-background-info: var(--ns-color-modes-highContrast-background-info);
+  --ns-color-border-default: var(--ns-color-modes-highContrast-border-default);
+  --ns-color-border-strong: var(--ns-color-modes-highContrast-border-strong);
+  --ns-color-border-brand: var(--ns-color-modes-highContrast-border-brand);
+  --ns-color-border-focus: var(--ns-color-modes-highContrast-border-focus);
+  --ns-color-border-danger: var(--ns-color-modes-highContrast-border-danger);
+  --ns-color-focusRing-outer: var(--ns-color-modes-highContrast-focusRing-outer);
+  --ns-color-focusRing-inner: var(--ns-color-modes-highContrast-focusRing-inner);
+}

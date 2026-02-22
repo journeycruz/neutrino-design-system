@@ -1,0 +1,37 @@
+.ns-checkbox-field {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.ns-checkbox-label {
+  align-items: center;
+  color: var(--ns-color-text-default, #171b22);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--ns-typography-fontFamily-default, Inter, sans-serif);
+  gap: 0.5rem;
+}
+
+.ns-checkbox-input {
+  accent-color: var(--ns-component-button-background-default, #1f6fff);
+  block-size: 1rem;
+  inline-size: 1rem;
+  margin: 0;
+}
+
+.ns-checkbox-input:focus-visible {
+  box-shadow: 0 0 0 3px var(--ns-color-focusRing-outer, #87b8ff);
+  outline: none;
+}
+
+.ns-checkbox-label:has(.ns-checkbox-input:disabled) {
+  color: var(--ns-component-button-text-disabled, #728096);
+  cursor: not-allowed;
+}
+
+.ns-checkbox-hint {
+  color: var(--ns-color-text-subtle, #3f4755);
+  font-size: 0.875rem;
+  margin: 0;
+  padding-inline-start: 1.5rem;
+}
