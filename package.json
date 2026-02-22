@@ -8,6 +8,7 @@
     "ci:check": "pnpm lint && pnpm typecheck && pnpm test && pnpm storybook:build",
     "lint": "pnpm -r lint",
     "release:check": "node scripts/release/check-changeset.mjs",
+    "release:publish": "pnpm -r build && pnpm -r publish --access public --provenance --no-git-checks",
     "release:dry-run": "node scripts/release/dry-run.mjs",
     "test:release": "node --test scripts/release/check-changeset.test.mjs",
     "test": "pnpm -r test",
