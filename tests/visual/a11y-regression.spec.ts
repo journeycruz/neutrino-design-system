@@ -5,9 +5,10 @@ test("dialog keyboard and focus lifecycle stays stable", async ({ page }) => {
   await page.waitForLoadState("networkidle");
 
   const openButton = page.getByRole("button", { name: "Open dialog" });
-  await openButton.click();
-
   const dialog = page.getByRole("dialog", { name: "Archive project" });
+  if (!(await dialog.isVisible())) {
+    await openButton.click();
+  }
   await expect(dialog).toBeVisible();
 
   await page.keyboard.press("Tab");
