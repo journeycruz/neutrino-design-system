@@ -50,7 +50,10 @@ export const Default: Story = {
     await userEvent.click(openButton);
 
     const dialog = await canvas.findByRole("dialog", { name: "Archive project" });
-    await expect(dialog).toBeVisible();
+    await waitFor(() => {
+      expect(dialog).toHaveAttribute("data-state", "open");
+      expect(dialog).toBeVisible();
+    });
 
     await userEvent.keyboard("{Escape}");
     await waitFor(() => {
@@ -95,7 +98,10 @@ export const CloseControls: Story = {
     await userEvent.click(openButton);
 
     const dialog = await canvas.findByRole("dialog", { name: "Archive project" });
-    await expect(dialog).toBeVisible();
+    await waitFor(() => {
+      expect(dialog).toHaveAttribute("data-state", "open");
+      expect(dialog).toBeVisible();
+    });
 
     await userEvent.keyboard("{Escape}");
     await expect(canvas.getByRole("dialog", { name: "Archive project" })).toBeInTheDocument();
@@ -134,11 +140,20 @@ export const Nested: Story = {
     const openOuterButton = canvas.getByRole("button", { name: "Open outer dialog" });
     await userEvent.click(openOuterButton);
 
+    const outerDialog = await canvas.findByRole("dialog", { name: "Outer dialog" });
+    await waitFor(() => {
+      expect(outerDialog).toHaveAttribute("data-state", "open");
+      expect(outerDialog).toBeVisible();
+    });
+
     const openInnerButton = await canvas.findByRole("button", { name: "Open inner dialog" });
     await userEvent.click(openInnerButton);
 
     const innerDialog = await canvas.findByRole("dialog", { name: "Inner dialog" });
-    await expect(innerDialog).toBeVisible();
+    await waitFor(() => {
+      expect(innerDialog).toHaveAttribute("data-state", "open");
+      expect(innerDialog).toBeVisible();
+    });
 
     await userEvent.keyboard("{Escape}");
     await waitFor(() => {

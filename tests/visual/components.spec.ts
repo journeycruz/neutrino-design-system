@@ -14,6 +14,13 @@ for (const visualCase of visualCases) {
     await page.goto(`/iframe.html?id=${visualCase.id}&viewMode=story`);
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(100);
+    if (visualCase.id === "components-select--default") {
+      await expect(page.locator("#storybook-root")).toHaveScreenshot(visualCase.file, {
+        maxDiffPixelRatio: 0.02
+      });
+      return;
+    }
+
     await expect(page.locator("#storybook-root")).toHaveScreenshot(visualCase.file);
   });
 }

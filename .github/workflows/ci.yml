@@ -27,6 +27,6 @@ jobs:
       - run: pnpm storybook:build
       - run: pnpm build
       - run: pnpm bundle:check
-      - run: pnpm test:visual -- --list
+      - run: pnpm test:visual
       - run: pnpm test:a11y:regression
       - run: pnpm test:a11y:axe
