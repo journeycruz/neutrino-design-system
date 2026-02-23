@@ -14,13 +14,9 @@
 - `pnpm test`
 - `pnpm storybook`
 
-## Release Flow
+## Storybook Publishing
 
-1. Add a changeset with `pnpm changeset`.
-2. Push your PR and ensure CI is green.
-3. Merge to `main` to trigger the release workflow.
-
-## Prerelease Channel
-
-- Enter prerelease mode: `pnpm changeset pre enter next`
-- Exit prerelease mode: `pnpm changeset pre exit`
+- Storybook is published to GitHub Pages on pushes to `main`.
+- Live URL: `https://journeycruz.github.io/neutrino-design-system/`
+- Manual deploy is available from Actions via `Publish Storybook` (`workflow_dispatch`).
+- Ensure repository Pages is configured to build and deploy from **GitHub Actions**.
