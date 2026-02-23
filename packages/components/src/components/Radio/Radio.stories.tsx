@@ -1,11 +1,12 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
-import { Radio } from "./Radio";
+import { Radio, RadioGroup } from "./Radio";
 
 const meta = {
   title: "Components/Radio",
   component: Radio,
+  subcomponents: { RadioGroup },
   tags: ["autodocs"],
   args: {
     label: "Comfortable",
@@ -20,11 +21,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Group: Story = {
   render: () => (
-    <fieldset>
-      <legend>Density</legend>
-      <Radio defaultChecked label="Comfortable" name="density" value="comfortable" />
-      <Radio label="Compact" name="density" value="compact" />
-    </fieldset>
+    <RadioGroup defaultValue="comfortable" legend="Density" name="density">
+      <Radio label="Comfortable" value="comfortable" />
+      <Radio label="Compact" value="compact" />
+    </RadioGroup>
   ),
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const canvas = within(canvasElement);
@@ -38,23 +38,10 @@ export const Controlled: Story = {
   render: () => {
     const [value, setValue] = useState("comfortable");
     return (
-      <fieldset>
-        <legend>Density</legend>
-        <Radio
-          checked={value === "comfortable"}
-          label="Comfortable"
-          name="density-controlled"
-          onChange={() => setValue("comfortable")}
-          value="comfortable"
-        />
-        <Radio
-          checked={value === "compact"}
-          label="Compact"
-          name="density-controlled"
-          onChange={() => setValue("compact")}
-          value="compact"
-        />
-      </fieldset>
+      <RadioGroup legend="Density" name="density-controlled" onValueChange={(nextValue) => setValue(nextValue)} value={value}>
+        <Radio label="Comfortable" value="comfortable" />
+        <Radio label="Compact" value="compact" />
+      </RadioGroup>
     );
   }
 };
@@ -62,5 +49,43 @@ export const Controlled: Story = {
 export const Disabled: Story = {
   args: {
     disabled: true
+  }
+};
+
+export const HorizontalWithValidation: Story = {
+  render: () => (
+    <RadioGroup
+      defaultValue="compact"
+      error="Choose a layout density before continuing."
+      hint="This setting changes spacing density for tables and forms."
+      legend="Density"
+      name="density-horizontal"
+      orientation="horizontal"
+    >
+      <Radio label="Comfortable" value="comfortable" />
+      <Radio label="Compact" value="compact" />
+      <Radio label="Dense" value="dense" />
+    </RadioGroup>
+  )
+};
+
+export const KeyboardNavigation: Story = {
+  render: () => (
+    <RadioGroup defaultValue="comfortable" legend="Density" name="density-keyboard">
+      <Radio label="Comfortable" value="comfortable" />
+      <Radio label="Compact" value="compact" />
+      <Radio label="Dense" value="dense" />
+    </RadioGroup>
+  ),
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement);
+    const comfortable = canvas.getByLabelText("Comfortable");
+    const compact = canvas.getByLabelText("Compact");
+
+    comfortable.focus();
+    await userEvent.keyboard("{ArrowDown}");
+
+    await expect(compact).toBeChecked();
+    await expect(compact).toHaveFocus();
   }
 };

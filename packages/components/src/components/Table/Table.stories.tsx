@@ -8,8 +8,8 @@ type TokenRow = {
 };
 
 const columns = [
-  { key: "token", header: "Token" },
-  { key: "value", header: "Value" },
+  { key: "token", header: "Token", rowHeader: true },
+  { key: "value", header: "Value", align: "right" },
   { key: "usage", header: "Usage" }
 ] as const;
 
@@ -45,5 +45,25 @@ export const Striped: Story = {
 export const Dense: Story = {
   args: {
     dense: true
+  }
+};
+
+export const Comfortable: Story = {
+  args: {
+    density: "comfortable"
+  }
+};
+
+export const Loading: Story = {
+  args: {
+    loading: true,
+    loadingLabel: "Loading token registry..."
+  }
+};
+
+export const Empty: Story = {
+  args: {
+    rows: [],
+    emptyMessage: "No tokens available for this theme"
   }
 };

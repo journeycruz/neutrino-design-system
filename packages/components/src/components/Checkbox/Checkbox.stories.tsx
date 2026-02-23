@@ -30,6 +30,29 @@ export const Checked: Story = {
   }
 };
 
+export const Indeterminate: Story = {
+  args: {
+    indeterminate: true,
+    hint: "Some items in this group are selected"
+  },
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement);
+    const checkbox = canvas.getByLabelText("Email notifications");
+    await expect(checkbox).toHaveAttribute("aria-checked", "mixed");
+  }
+};
+
+export const KeyboardInteraction: Story = {
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement);
+    const checkbox = canvas.getByLabelText("Email notifications");
+
+    checkbox.focus();
+    await userEvent.keyboard("{Enter}");
+    await expect(checkbox).toBeChecked();
+  }
+};
+
 export const Disabled: Story = {
   args: {
     disabled: true,

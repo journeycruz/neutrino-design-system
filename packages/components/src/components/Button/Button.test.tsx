@@ -19,6 +19,46 @@ describe("Button", () => {
     expect(onClick).toHaveBeenCalled();
   });
 
+  it("defaults to a medium primary button", () => {
+    render(<Button>Save</Button>);
+    const button = screen.getByRole("button", { name: "Save" });
+
+    expect(button).toHaveClass("ns-button--primary");
+    expect(button).toHaveClass("ns-button--md");
+    expect(button).toHaveAttribute("type", "button");
+  });
+
+  it("supports explicit size and variant combinations", () => {
+    render(
+      <Button size="lg" variant="secondary">
+        Export
+      </Button>
+    );
+
+    const button = screen.getByRole("button", { name: "Export" });
+    expect(button).toHaveClass("ns-button--secondary");
+    expect(button).toHaveClass("ns-button--lg");
+  });
+
+  it("marks loading state as busy and disabled", () => {
+    render(<Button loading>Save</Button>);
+    const button = screen.getByRole("button", { name: /save/i });
+
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute("aria-busy", "true");
+    expect(button.querySelector(".ns-button__spinner")).not.toBeNull();
+  });
+
+  it("renders icon-only button with accessible label", () => {
+    render(
+      <Button aria-label="Close panel" size="sm" startIcon={<span aria-hidden="true">x</span>} />
+    );
+
+    const button = screen.getByRole("button", { name: "Close panel" });
+    expect(button).toHaveClass("ns-button--icon-only");
+    expect(button).toHaveClass("ns-button--sm");
+  });
+
   it("has no obvious axe violations", async () => {
     const { container } = render(<Button>Audit</Button>);
     const result = await runAxe(container);

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { Dialog } from "./Dialog";
 
@@ -14,6 +14,19 @@ describe("Dialog", () => {
     expect(screen.getByRole("dialog", { name: "Delete item" })).toBeInTheDocument();
   });
 
+  it("wires an accessible description when provided", () => {
+    render(
+      <Dialog description="This cannot be undone." onOpenChange={() => {}} open title="Delete item">
+        Body
+      </Dialog>
+    );
+
+    const dialog = screen.getByRole("dialog", { name: "Delete item" });
+    const description = screen.getByText("This cannot be undone.");
+
+    expect(dialog).toHaveAttribute("aria-describedby", description.id);
+  });
+
   it("closes on Escape", () => {
     const onOpenChange = vi.fn();
     render(
@@ -26,6 +39,18 @@ describe("Dialog", () => {
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
+  it("does not close on Escape when disabled", () => {
+    const onOpenChange = vi.fn();
+    render(
+      <Dialog closeOnEscape={false} onOpenChange={onOpenChange} open title="Settings">
+        Body
+      </Dialog>
+    );
+
+    fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
+    expect(onOpenChange).not.toHaveBeenCalled();
+  });
+
   it("closes on overlay click", () => {
     const onOpenChange = vi.fn();
     render(
@@ -36,6 +61,18 @@ describe("Dialog", () => {
 
     fireEvent.click(screen.getByRole("dialog").parentElement as HTMLElement);
     expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  it("does not close on overlay click when disabled", () => {
+    const onOpenChange = vi.fn();
+    render(
+      <Dialog closeOnBackdropClick={false} onOpenChange={onOpenChange} open title="Settings">
+        Body
+      </Dialog>
+    );
+
+    fireEvent.click(screen.getByRole("dialog").parentElement as HTMLElement);
+    expect(onOpenChange).not.toHaveBeenCalled();
   });
 
   it("traps focus while open", () => {
@@ -58,7 +95,7 @@ describe("Dialog", () => {
     expect(document.activeElement).toBe(closeButton);
   });
 
-  it("restores trigger focus after close", () => {
+  it("restores trigger focus after close", async () => {
     const trigger = document.createElement("button");
     trigger.textContent = "Open dialog";
     document.body.append(trigger);
@@ -76,11 +113,13 @@ describe("Dialog", () => {
       </Dialog>
     );
 
-    expect(document.activeElement).toBe(trigger);
+    await waitFor(() => {
+      expect(document.activeElement).toBe(trigger);
+    });
     trigger.remove();
   });
 
-  it("restores focus to outer trigger when nested dialog closes", () => {
+  it("restores focus to outer trigger when nested dialog closes", async () => {
     const NestedDialogHarness = () => {
       const [outerOpen, setOuterOpen] = useState(false);
       const [innerOpen, setInnerOpen] = useState(false);
@@ -114,7 +153,7 @@ describe("Dialog", () => {
 
     fireEvent.keyDown(innerDialog, { key: "Escape" });
 
-    expect(screen.queryByRole("dialog", { name: "Inner dialog" })).not.toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByRole("dialog", { name: "Inner dialog" }));
     expect(openInnerButton).toHaveFocus();
   });
 });

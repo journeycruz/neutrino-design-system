@@ -35,6 +35,45 @@ export const Default: Story = {
   }
 };
 
+export const ManualActivation: Story = {
+  args: {
+    activationMode: "manual"
+  },
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement);
+    const overviewTab = canvas.getByRole("tab", { name: "Overview" });
+
+    overviewTab.focus();
+    await userEvent.keyboard("{ArrowRight}");
+
+    const tokensTab = canvas.getByRole("tab", { name: "Tokens" });
+    await expect(tokensTab).toHaveFocus();
+    await expect(canvas.getByRole("tabpanel")).toHaveTextContent("Overview content");
+
+    await userEvent.keyboard("{Enter}");
+    await expect(tokensTab).toHaveAttribute("aria-selected", "true");
+    await expect(canvas.getByRole("tabpanel")).toHaveTextContent("Token guidelines");
+  }
+};
+
+export const Vertical: Story = {
+  args: {
+    orientation: "vertical"
+  },
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement);
+    const overviewTab = canvas.getByRole("tab", { name: "Overview" });
+
+    overviewTab.focus();
+    await userEvent.keyboard("{ArrowDown}");
+
+    const tokensTab = canvas.getByRole("tab", { name: "Tokens" });
+    await expect(tokensTab).toHaveFocus();
+    await expect(tokensTab).toHaveAttribute("aria-selected", "true");
+    await expect(canvas.getByRole("tablist")).toHaveAttribute("aria-orientation", "vertical");
+  }
+};
+
 export const WithDisabled: Story = {
   args: {
     items: [

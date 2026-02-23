@@ -32,7 +32,7 @@ describe("FormField", () => {
 
   it("merges existing aria-describedby values with generated hint and error ids", () => {
     render(
-      <FormField error="Required" hint="Include a summary" label="Summary">
+      <FormField errorText="Required" helpText="Include a summary" label="Summary">
         <textarea aria-describedby="external-help" />
       </FormField>
     );
@@ -41,11 +41,12 @@ describe("FormField", () => {
     const describedBy = textarea.getAttribute("aria-describedby")?.split(" ") ?? [];
     expect(describedBy).toContain("external-help");
     expect(describedBy.length).toBe(3);
+    expect(textarea).toHaveAttribute("aria-errormessage", describedBy[2]);
   });
 
   it("applies describedBy and invalid state to Select", () => {
     render(
-      <FormField error="Required" hint="Choose one" label="Status">
+      <FormField errorText="Required" helpText="Choose one" label="Status" required>
         <Select
           label="Status"
           options={[
@@ -58,12 +59,13 @@ describe("FormField", () => {
 
     const select = screen.getByRole("combobox", { name: "Status" });
     expect(select).toHaveAttribute("aria-invalid", "true");
+    expect(select).toHaveAttribute("aria-required", "true");
     expect(select.getAttribute("aria-describedby")?.split(" ").length).toBe(2);
   });
 
   it("composes with Input hint semantics without dropping field-level metadata", () => {
     render(
-      <FormField error="Field level error" hint="Field level hint" label="Username">
+      <FormField errorText="Field level error" helpText="Field level hint" label="Username" required>
         <Input hint="Control hint" label="Username" />
       </FormField>
     );
@@ -77,7 +79,7 @@ describe("FormField", () => {
 
   it("composes with Select hint semantics without dropping field-level metadata", () => {
     render(
-      <FormField error="Field level error" hint="Field level hint" label="Status">
+      <FormField errorText="Field level error" helpText="Field level hint" label="Status" required>
         <Select
           hint="Control hint"
           label="Status"
@@ -99,10 +101,10 @@ describe("FormField", () => {
   it("integrates with Checkbox and Radio controls", () => {
     render(
       <>
-        <FormField error="Required" hint="Pick one" label="Newsletter">
+        <FormField errorText="Required" helpText="Pick one" label="Newsletter" required>
           <Checkbox label="Weekly updates" />
         </FormField>
-        <FormField error="Required" hint="Pick one" label="Density">
+        <FormField errorText="Required" helpText="Pick one" label="Density" required>
           <Radio label="Compact" name="density" value="compact" />
         </FormField>
       </>
@@ -119,10 +121,10 @@ describe("FormField", () => {
   it("preserves grouped control hints while adding field-level metadata", () => {
     render(
       <>
-        <FormField error="Required" hint="Pick one" label="Newsletter">
+        <FormField errorText="Required" helpText="Pick one" label="Newsletter">
           <Checkbox hint="Control hint" label="Newsletter" />
         </FormField>
-        <FormField error="Required" hint="Pick one" label="Density">
+        <FormField errorText="Required" helpText="Pick one" label="Density">
           <Radio hint="Control hint" label="Density" name="density-composed" value="compact" />
         </FormField>
       </>
@@ -139,14 +141,39 @@ describe("FormField", () => {
 
   it("integrates with Switch and applies invalid semantics", () => {
     render(
-      <FormField error="Required" hint="Enable it" label="Email alerts">
+      <FormField errorText="Required" helpText="Enable it" label="Email alerts" required>
         <Switch label="Email alerts" />
       </FormField>
     );
 
-    const toggle = screen.getByRole("switch", { name: "Email alerts" });
+    const toggle = screen.getByRole("switch", { name: /Email alerts/ });
     expect(toggle).toHaveAttribute("aria-invalid", "true");
     expect(toggle.getAttribute("aria-describedby")?.split(" ").length).toBe(2);
+  });
+
+  it("supports legacy hint and error props for backward compatibility", () => {
+    render(
+      <FormField error="Legacy error" hint="Legacy hint" label="Legacy field">
+        <input />
+      </FormField>
+    );
+
+    const input = screen.getByRole("textbox", { name: "Legacy field" });
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input.getAttribute("aria-describedby")?.split(" ").length).toBe(2);
+  });
+
+  it("prefers helpText and errorText when both old and new props are provided", () => {
+    render(
+      <FormField error="Old error" errorText="New error" helpText="New help" hint="Old help" label="Priority field">
+        <input />
+      </FormField>
+    );
+
+    expect(screen.queryByText("Old help")).not.toBeInTheDocument();
+    expect(screen.queryByText("Old error")).not.toBeInTheDocument();
+    expect(screen.getByText("New help")).toBeInTheDocument();
+    expect(screen.getByText("New error")).toBeInTheDocument();
   });
 
   it("applies generated accessibility props through render-function children", () => {

@@ -5,18 +5,25 @@
   cursor: pointer;
   display: inline-flex;
   font-family: var(--ns-component-button-fontFamily, Inter, sans-serif);
-  font-size: var(--ns-component-button-fontSize, 0.875rem);
+  font-size: var(--ns-component-button-fontSize-md, 0.875rem);
   font-weight: var(--ns-component-button-fontWeight, 600);
+  gap: var(--ns-component-button-gap, 0.5rem);
   height: var(--ns-component-button-height-md, 2.5rem);
   justify-content: center;
+  line-height: 1;
   padding: 0 var(--ns-component-button-paddingX-md, 1rem);
+  position: relative;
   text-decoration: none;
-  transition: background-color 120ms ease, color 120ms ease, box-shadow 120ms ease;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, box-shadow 120ms ease,
+    transform 120ms ease;
+  user-select: none;
+  white-space: nowrap;
 }
 
 .ns-button:focus-visible {
-  box-shadow: 0 0 0 3px var(--ns-component-button-focusRingColor, #87b8ff);
   outline: none;
+  box-shadow: 0 0 0 2px var(--ns-color-background-canvas, #ffffff),
+    0 0 0 4px var(--ns-component-button-focusRingColor, var(--ns-color-border-focus, #87b8ff));
 }
 
 .ns-button--primary {
@@ -24,11 +31,11 @@
   color: var(--ns-component-button-text-default, #ffffff);
 }
 
-.ns-button--primary:hover {
+.ns-button--primary:not(:disabled):hover {
   background: var(--ns-component-button-background-hover, #1243a1);
 }
 
-.ns-button--primary:active {
+.ns-button--primary:not(:disabled):active {
   background: var(--ns-component-button-background-active, #0d3071);
 }
 
@@ -38,9 +45,110 @@
   color: var(--ns-color-text-default, #171b22);
 }
 
+.ns-button--secondary:not(:disabled):hover {
+  background: var(--ns-color-background-surface, #f7f9fc);
+  border-color: var(--ns-color-border-strong, #b7c1d1);
+}
+
+.ns-button--secondary:not(:disabled):active {
+  background: var(--ns-color-background-elevated, #eef2f7);
+}
+
+.ns-button:not(:disabled):active {
+  transform: translateY(1px);
+}
+
 .ns-button:disabled {
   background: var(--ns-component-button-background-disabled, #d8dde5);
+  border-color: var(--ns-component-button-border-disabled, transparent);
   color: var(--ns-component-button-text-disabled, #728096);
   cursor: not-allowed;
   opacity: var(--ns-opacity-disabled, 0.45);
+  transform: none;
+}
+
+.ns-button--secondary:disabled {
+  border-color: var(--ns-color-border-default, #d8dde5);
+}
+
+.ns-button[aria-busy="true"] {
+  cursor: progress;
+}
+
+.ns-button--sm {
+  font-size: var(--ns-component-button-fontSize-sm, 0.8125rem);
+  height: var(--ns-component-button-height-sm, 2rem);
+  padding: 0 var(--ns-component-button-paddingX-sm, 0.75rem);
+}
+
+.ns-button--md {
+  font-size: var(--ns-component-button-fontSize-md, 0.875rem);
+  height: var(--ns-component-button-height-md, 2.5rem);
+  padding: 0 var(--ns-component-button-paddingX-md, 1rem);
+}
+
+.ns-button--lg {
+  font-size: var(--ns-component-button-fontSize-lg, 0.9375rem);
+  height: var(--ns-component-button-height-lg, 2.75rem);
+  padding: 0 var(--ns-component-button-paddingX-lg, 1.25rem);
+}
+
+.ns-button__label {
+  align-items: center;
+  display: inline-flex;
+}
+
+.ns-button__icon {
+  align-items: center;
+  display: inline-flex;
+  line-height: 0;
+}
+
+.ns-button__icon svg {
+  fill: currentColor;
+  height: 1em;
+  width: 1em;
+}
+
+.ns-button__spinner {
+  animation: ns-button-spin 700ms linear infinite;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 9999px;
+  display: inline-block;
+  height: 1em;
+  width: 1em;
+}
+
+.ns-button--icon-only {
+  aspect-ratio: 1 / 1;
+  padding: 0;
+}
+
+.ns-button__sr-only {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+@keyframes ns-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ns-button {
+    transition: none;
+  }
+
+  .ns-button__spinner {
+    animation-duration: 1.4s;
+  }
 }

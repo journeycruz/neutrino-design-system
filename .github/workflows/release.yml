@@ -1,0 +1,34 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish packages after checks pass"
+        required: true
+        default: false
+        type: boolean
+
+jobs:
+  release-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm release:check
+
+  publish:
+    if: ${{ github.event.inputs.publish == 'true' }}
+    needs: release-check
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Release scaffold is active."
+          echo "Publishing is intentionally manual and must follow docs/platform/release-automation-policy.md."

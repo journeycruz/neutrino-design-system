@@ -27,8 +27,24 @@ export const Default: Story = {
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const canvas = within(canvasElement);
     const select = canvas.getByLabelText("Status");
+    await userEvent.tab();
+    await expect(select).toHaveFocus();
     await userEvent.selectOptions(select, "review");
     await expect(select).toHaveValue("review");
+  }
+};
+
+export const WithPlaceholder: Story = {
+  args: {
+    placeholder: "Select a status",
+    defaultValue: ""
+  },
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement);
+    const select = canvas.getByLabelText("Status");
+    await expect(select).toHaveValue("");
+    await userEvent.selectOptions(select, "published");
+    await expect(select).toHaveValue("published");
   }
 };
 
@@ -40,6 +56,8 @@ export const Disabled: Story = {
 
 export const Invalid: Story = {
   args: {
+    placeholder: "Select a status",
+    defaultValue: "",
     hint: "Select the publishing state.",
     error: "Status is required"
   }
