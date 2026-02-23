@@ -7,10 +7,6 @@
     "build": "pnpm -r build",
     "ci:check": "pnpm lint && pnpm typecheck && pnpm test && pnpm storybook:build",
     "lint": "pnpm -r lint",
-    "release:check": "node scripts/release/check-changeset.mjs",
-    "release:publish": "pnpm -r build && pnpm -r publish --access public --provenance --no-git-checks",
-    "release:dry-run": "node scripts/release/dry-run.mjs",
-    "test:release": "node --test scripts/release/check-changeset.test.mjs",
     "test": "pnpm -r test",
     "test:storybook": "pnpm --filter @neutrino/storybook test-storybook",
     "test:consumers": "node scripts/consumers-smoke.mjs",
@@ -25,7 +21,6 @@
   "devDependencies": {
     "@neutrino/components": "workspace:*",
     "@neutrino/tokens": "workspace:*",
-    "@changesets/cli": "^2.29.7",
     "@types/node": "^24.3.0",
     "@playwright/test": "^1.58.2",
     "@testing-library/jest-dom": "^6.9.1",
