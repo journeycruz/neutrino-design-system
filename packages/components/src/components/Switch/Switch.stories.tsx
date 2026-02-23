@@ -8,7 +8,9 @@ const meta = {
   component: Switch,
   tags: ["autodocs"],
   args: {
-    label: "Email alerts"
+    label: "Email alerts",
+    onLabel: "Enabled",
+    offLabel: "Disabled"
   }
 } satisfies Meta<typeof Switch>;
 
@@ -18,18 +20,26 @@ type Story = StoryObj<typeof meta>;
 
 export const Uncontrolled: Story = {
   args: {
-    defaultChecked: true
+    defaultChecked: true,
+    hint: "Managed per account"
   }
 };
 
 export const Controlled: Story = {
   render: () => {
     const [checked, setChecked] = useState(false);
-    return <Switch checked={checked} label="Email alerts" onCheckedChange={setChecked} />;
+    return (
+      <Switch
+        checked={checked}
+        hint="Changes apply instantly"
+        label="Email alerts"
+        onCheckedChange={setChecked}
+      />
+    );
   },
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const canvas = within(canvasElement);
-    const toggle = canvas.getByRole("switch", { name: "Email alerts" });
+    const toggle = canvas.getByRole("switch", { name: /Email alerts/i });
     await userEvent.click(toggle);
     await expect(toggle).toHaveAttribute("aria-checked", "true");
   }
@@ -39,5 +49,12 @@ export const Disabled: Story = {
   args: {
     disabled: true,
     defaultChecked: true
+  }
+};
+
+export const Small: Story = {
+  args: {
+    size: "sm",
+    defaultChecked: false
   }
 };

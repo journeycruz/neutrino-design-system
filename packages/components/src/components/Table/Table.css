@@ -1,10 +1,13 @@
 .ns-table-wrap {
+  border: 1px solid var(--ns-color-border-default, #d8dde5);
+  border-radius: var(--ns-radius-medium, 0.5rem);
   overflow-x: auto;
 }
 
 .ns-table {
   border-collapse: collapse;
   color: var(--ns-color-text-default, #171b22);
+  min-width: 100%;
   width: 100%;
 }
 
@@ -18,10 +21,26 @@
 
 .ns-table-cell {
   border-bottom: 1px solid var(--ns-color-border-default, #d8dde5);
-  padding: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
 }
 
-.ns-table thead .ns-table-cell {
+.ns-table-head-cell {
+  background: var(--ns-color-surface-subtle, #f7f9fc);
+  color: var(--ns-color-text-strong, #171b22);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.ns-table-body tr:last-child .ns-table-cell,
+.ns-table-body tr:last-child .ns-table-row-header {
+  border-bottom: none;
+}
+
+.ns-table-row-header {
+  background: var(--ns-color-surface-default, #ffffff);
   font-weight: 600;
 }
 
@@ -38,9 +57,35 @@
 }
 
 .ns-table--striped tbody tr:nth-child(even) {
-  background: #f7f9fc;
+  background: var(--ns-color-surface-subtle, #f7f9fc);
 }
 
-.ns-table--dense .ns-table-cell {
-  padding: 0.5rem;
+.ns-table--density-compact .ns-table-cell,
+.ns-table--density-compact .ns-table-row-header,
+.ns-table--dense .ns-table-cell,
+.ns-table--dense .ns-table-row-header {
+  padding: 0.5rem 0.75rem;
+}
+
+.ns-table--density-regular .ns-table-cell,
+.ns-table--density-regular .ns-table-row-header {
+  padding: 0.75rem 1rem;
+}
+
+.ns-table--density-comfortable .ns-table-cell,
+.ns-table--density-comfortable .ns-table-row-header {
+  padding: 1rem 1.25rem;
+}
+
+.ns-table-state-cell {
+  color: var(--ns-color-text-subtle, #3f4755);
+  text-align: center;
+}
+
+.ns-table--state-loading .ns-table-state-cell {
+  font-style: italic;
+}
+
+.ns-table--state-empty .ns-table-state-cell {
+  font-weight: 500;
 }

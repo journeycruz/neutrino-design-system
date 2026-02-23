@@ -44,3 +44,31 @@ export const Invalid: Story = {
     }
   }
 };
+
+export const Sizes: Story = {
+  render: () => (
+    <div style={{ display: "grid", gap: "0.75rem", maxWidth: "24rem" }}>
+      <Input label="Small" placeholder="Small input" size="sm" />
+      <Input label="Medium" placeholder="Medium input" size="md" />
+      <Input label="Large" placeholder="Large input" size="lg" />
+    </div>
+  )
+};
+
+export const WithPrefixAndSuffix: Story = {
+  args: {
+    label: "Website",
+    placeholder: "company",
+    prefix: "https://",
+    suffix: ".com"
+  }
+};
+
+export const DisabledAndReadOnly: Story = {
+  render: () => (
+    <div style={{ display: "grid", gap: "0.75rem", maxWidth: "24rem" }}>
+      <Input defaultValue="Locked" disabled label="Disabled" placeholder="Unavailable" />
+      <Input defaultValue="Readonly value" label="Read only" readOnly />
+    </div>
+  )
+};

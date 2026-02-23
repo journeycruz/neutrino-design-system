@@ -11,15 +11,28 @@ export type TabItem = {
 export type TabsProps = {
   items: TabItem[];
   defaultTabId?: string;
+  orientation?: "horizontal" | "vertical";
+  activationMode?: "automatic" | "manual";
+  ariaLabel?: string;
+  ariaLabelledBy?: string;
 };
 
-export const Tabs = ({ items, defaultTabId }: TabsProps) => {
+export const Tabs = ({
+  items,
+  defaultTabId,
+  orientation = "horizontal",
+  activationMode = "automatic",
+  ariaLabel = "Tabs",
+  ariaLabelledBy
+}: TabsProps) => {
   const tabsId = useId();
   const firstEnabled = items.find((item) => !item.disabled);
   const initialActiveItem = items.find((item) => item.id === defaultTabId && !item.disabled) ?? firstEnabled;
   const [activeId, setActiveId] = useState(initialActiveItem?.id);
+  const [focusedId, setFocusedId] = useState(initialActiveItem?.id);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const activeIndex = useMemo(() => items.findIndex((item) => item.id === activeId), [activeId, items]);
+  const focusedIndex = useMemo(() => items.findIndex((item) => item.id === focusedId), [focusedId, items]);
 
   const findNextEnabledIndex = (startIndex: number, direction: 1 | -1) => {
     if (!items.length || items.every((item) => item.disabled)) {
@@ -37,12 +50,42 @@ export const Tabs = ({ items, defaultTabId }: TabsProps) => {
     return -1;
   };
 
+  const keyMap =
+    orientation === "vertical"
+      ? {
+          previous: "ArrowUp",
+          next: "ArrowDown"
+        }
+      : {
+          previous: "ArrowLeft",
+          next: "ArrowRight"
+        };
+
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (!items.length) {
       return;
     }
 
-    if (event.key !== "ArrowRight" && event.key !== "ArrowLeft" && event.key !== "Home" && event.key !== "End") {
+    if (
+      event.key !== keyMap.next &&
+      event.key !== keyMap.previous &&
+      event.key !== "Home" &&
+      event.key !== "End" &&
+      event.key !== "Enter" &&
+      event.key !== " "
+    ) {
+      return;
+    }
+
+    if (event.key === "Enter" || event.key === " ") {
+      if (activationMode !== "manual") {
+        return;
+      }
+
+      if (focusedId) {
+        event.preventDefault();
+        setActiveId(focusedId);
+      }
       return;
     }
 
@@ -54,12 +97,12 @@ export const Tabs = ({ items, defaultTabId }: TabsProps) => {
     event.preventDefault();
 
     const focusedElement = document.activeElement;
-    const focusedIndex = tabRefs.current.findIndex((element) => element === focusedElement);
-    let nextIndex = focusedIndex >= 0 ? focusedIndex : activeIndex >= 0 ? activeIndex : 0;
+    const focusedDomIndex = tabRefs.current.findIndex((element) => element === focusedElement);
+    let nextIndex = focusedDomIndex >= 0 ? focusedDomIndex : focusedIndex >= 0 ? focusedIndex : activeIndex >= 0 ? activeIndex : 0;
 
-    if (event.key === "ArrowRight") {
+    if (event.key === keyMap.next) {
       nextIndex = findNextEnabledIndex(nextIndex, 1);
-    } else if (event.key === "ArrowLeft") {
+    } else if (event.key === keyMap.previous) {
       nextIndex = findNextEnabledIndex(nextIndex, -1);
     } else if (event.key === "Home") {
       nextIndex = enabledIndexes[0];
@@ -71,18 +114,33 @@ export const Tabs = ({ items, defaultTabId }: TabsProps) => {
       return;
     }
 
-    setActiveId(items[nextIndex].id);
+    const nextId = items[nextIndex].id;
+    setFocusedId(nextId);
+    if (activationMode === "automatic") {
+      setActiveId(nextId);
+    }
     tabRefs.current[nextIndex]?.focus();
   };
 
   const activeTab = items.find((item) => item.id === activeId && !item.disabled) ?? firstEnabled;
+  const selectedTabId = activeTab?.id;
+  const focusableTabId = activationMode === "manual" ? (focusedId ?? selectedTabId) : selectedTabId;
 
   return (
-    <div className="ns-tabs">
-      <div aria-label="Tabs" className="ns-tabs-list" onKeyDown={onKeyDown} role="tablist">
+    <div className={["ns-tabs", orientation === "vertical" ? "ns-tabs--vertical" : ""].filter(Boolean).join(" ")}>
+      <div
+        aria-label={ariaLabelledBy ? undefined : ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        aria-orientation={orientation}
+        className={["ns-tabs-list", orientation === "vertical" ? "ns-tabs-list--vertical" : ""].filter(Boolean).join(" ")}
+        onKeyDown={onKeyDown}
+        role="tablist"
+      >
         {items.map((item, index) => {
-          const selected = activeTab?.id === item.id;
+          const selected = selectedTabId === item.id;
+          const tabId = `${tabsId}-tab-${item.id}`;
           const panelId = `${tabsId}-panel-${item.id}`;
+          const focusable = focusableTabId === item.id;
           return (
             <button
               aria-controls={panelId}
@@ -90,10 +148,16 @@ export const Tabs = ({ items, defaultTabId }: TabsProps) => {
               aria-selected={selected}
               className={["ns-tab", selected ? "ns-tab--active" : "", item.disabled ? "ns-tab--disabled" : ""].filter(Boolean).join(" ")}
               disabled={item.disabled}
-              id={`${tabsId}-tab-${item.id}`}
+              id={tabId}
               key={item.id}
+              onFocus={() => {
+                if (!item.disabled) {
+                  setFocusedId(item.id);
+                }
+              }}
               onClick={() => {
                 if (!item.disabled) {
+                  setFocusedId(item.id);
                   setActiveId(item.id);
                 }
               }}
@@ -101,7 +165,7 @@ export const Tabs = ({ items, defaultTabId }: TabsProps) => {
                 tabRefs.current[index] = element;
               }}
               role="tab"
-              tabIndex={selected ? 0 : -1}
+              tabIndex={focusable && !item.disabled ? 0 : -1}
               type="button"
             >
               {item.label}
@@ -109,17 +173,22 @@ export const Tabs = ({ items, defaultTabId }: TabsProps) => {
           );
         })}
       </div>
-      {activeTab ? (
+      {items.map((item) => {
+        const selected = selectedTabId === item.id;
+        return (
           <div
-          aria-labelledby={`${tabsId}-tab-${activeTab.id}`}
-          className="ns-tab-panel"
-          id={`${tabsId}-panel-${activeTab.id}`}
-          role="tabpanel"
-          tabIndex={0}
-        >
-          {activeTab.panel}
-        </div>
-      ) : null}
+            aria-labelledby={`${tabsId}-tab-${item.id}`}
+            className="ns-tab-panel"
+            hidden={!selected}
+            id={`${tabsId}-panel-${item.id}`}
+            key={item.id}
+            role="tabpanel"
+            tabIndex={selected ? 0 : -1}
+          >
+            {item.panel}
+          </div>
+        );
+      })}
     </div>
   );
 };

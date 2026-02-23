@@ -27,6 +27,49 @@ describe("Select", () => {
     expect(screen.getByLabelText("Status")).toBeDisabled();
   });
 
+  it("renders a placeholder option when provided", () => {
+    render(<Select defaultValue="" label="Status" options={options} placeholder="Select status" />);
+
+    const select = screen.getByLabelText("Status");
+    expect(select).toHaveValue("");
+    expect(select).toHaveClass("ns-select--placeholder");
+
+    fireEvent.change(select, { target: { value: "published" } });
+    expect(select).toHaveValue("published");
+    expect(select).not.toHaveClass("ns-select--placeholder");
+  });
+
+  it("links error text through aria-errormessage", () => {
+    render(<Select error="Status is required" label="Status" options={options} />);
+
+    const select = screen.getByLabelText("Status");
+    const error = screen.getByText("Status is required");
+
+    expect(select).toHaveAttribute("aria-invalid", "true");
+    expect(select).toHaveAttribute("aria-errormessage", error.id);
+  });
+
+  it("forwards keyboard events for external handlers", () => {
+    const onKeyDown = vi.fn();
+    render(<Select label="Status" onKeyDown={onKeyDown} options={options} />);
+
+    const select = screen.getByLabelText("Status");
+    fireEvent.keyDown(select, { key: "ArrowDown" });
+
+    expect(onKeyDown).toHaveBeenCalledTimes(1);
+  });
+
+  it("supports Home and End keyboard navigation", () => {
+    render(<Select defaultValue="published" label="Status" options={options} />);
+
+    const select = screen.getByLabelText("Status");
+    fireEvent.keyDown(select, { key: "Home" });
+    expect(select).toHaveValue("draft");
+
+    fireEvent.keyDown(select, { key: "End" });
+    expect(select).toHaveValue("archived");
+  });
+
   it("merges external aria-describedby with local hint and error", () => {
     render(
       <Select aria-describedby="external-note" error="Required" hint="Pick one" label="Status" options={options} />

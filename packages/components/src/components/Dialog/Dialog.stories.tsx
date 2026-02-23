@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import { Button } from "../Button/Button";
 import { Dialog } from "./Dialog";
 
@@ -11,7 +11,8 @@ const meta = {
   args: {
     open: false,
     onOpenChange: () => {},
-    title: "Archive project"
+    title: "Archive project",
+    description: "Archiving keeps history intact while removing the project from active views."
   },
   parameters: {
     a11y: {
@@ -38,7 +39,7 @@ export const Default: Story = {
       <>
         <Button onClick={() => setOpen(true)}>Open dialog</Button>
         <Dialog {...args} onOpenChange={setOpen} open={open}>
-          This action moves the project to archive.
+          Confirm to archive this project and notify collaborators.
         </Dialog>
       </>
     );
@@ -52,7 +53,9 @@ export const Default: Story = {
     await expect(dialog).toBeVisible();
 
     await userEvent.keyboard("{Escape}");
-    await expect(canvas.queryByRole("dialog", { name: "Archive project" })).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(canvas.queryByRole("dialog", { name: "Archive project" })).not.toBeInTheDocument();
+    });
     await expect(openButton).toHaveFocus();
   }
 };
@@ -63,9 +66,45 @@ export const Open: Story = {
   },
   render: (args) => (
     <Dialog {...args} onOpenChange={() => {}}>
-      This action moves the project to archive.
+      Confirm to archive this project and notify collaborators.
     </Dialog>
   )
+};
+
+export const CloseControls: Story = {
+  render: (args) => {
+    const [open, setOpen] = useState(false);
+
+    return (
+      <>
+        <Button onClick={() => setOpen(true)}>Open protected dialog</Button>
+        <Dialog {...args} closeOnBackdropClick={false} closeOnEscape={false} onOpenChange={setOpen} open={open}>
+          This dialog ignores Escape and backdrop clicks.
+          <div style={{ marginTop: "1rem" }}>
+            <Button onClick={() => setOpen(false)} variant="secondary">
+              Close from action
+            </Button>
+          </div>
+        </Dialog>
+      </>
+    );
+  },
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement);
+    const openButton = canvas.getByRole("button", { name: "Open protected dialog" });
+    await userEvent.click(openButton);
+
+    const dialog = await canvas.findByRole("dialog", { name: "Archive project" });
+    await expect(dialog).toBeVisible();
+
+    await userEvent.keyboard("{Escape}");
+    await expect(canvas.getByRole("dialog", { name: "Archive project" })).toBeInTheDocument();
+
+    await userEvent.click(canvas.getByRole("button", { name: "Close from action" }));
+    await waitFor(() => {
+      expect(canvas.queryByRole("dialog", { name: "Archive project" })).not.toBeInTheDocument();
+    });
+  }
 };
 
 export const Nested: Story = {
@@ -102,7 +141,9 @@ export const Nested: Story = {
     await expect(innerDialog).toBeVisible();
 
     await userEvent.keyboard("{Escape}");
-    await expect(canvas.queryByRole("dialog", { name: "Inner dialog" })).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(canvas.queryByRole("dialog", { name: "Inner dialog" })).not.toBeInTheDocument();
+    });
     await expect(openInnerButton).toHaveFocus();
   }
 };

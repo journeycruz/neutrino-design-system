@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { Checkbox } from "./Checkbox";
 
@@ -10,15 +11,18 @@ describe("Checkbox", () => {
     expect(checkbox).toHaveAttribute("type", "checkbox");
   });
 
-  it("toggles with click and keyboard", () => {
+  it("toggles with click, space, and enter keys", async () => {
+    const user = userEvent.setup();
     const onChange = vi.fn();
     render(<Checkbox label="Email notifications" onChange={onChange} />);
     const checkbox = screen.getByLabelText("Email notifications");
 
-    fireEvent.click(checkbox);
-    fireEvent.keyDown(checkbox, { key: " " });
+    await user.click(checkbox);
+    checkbox.focus();
+    await user.keyboard(" ");
+    await user.keyboard("{Enter}");
 
-    expect(onChange).toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalledTimes(3);
   });
 
   it("supports disabled state", () => {
@@ -33,5 +37,22 @@ describe("Checkbox", () => {
 
     expect(describedBy).toContain("external-note");
     expect(describedBy.length).toBe(2);
+  });
+
+  it("supports indeterminate state semantics", () => {
+    render(<Checkbox indeterminate label="Email notifications" />);
+    const checkbox = screen.getByLabelText("Email notifications") as HTMLInputElement;
+
+    expect(checkbox.indeterminate).toBe(true);
+    expect(checkbox).toHaveAttribute("aria-checked", "mixed");
+  });
+
+  it("merges external aria-labelledby with internal label", () => {
+    render(<Checkbox aria-labelledby="external-label" label="Email notifications" />);
+    const checkbox = screen.getByRole("checkbox", { name: "Email notifications" });
+    const labelledBy = checkbox.getAttribute("aria-labelledby")?.split(" ") ?? [];
+
+    expect(labelledBy).toContain("external-label");
+    expect(labelledBy.some((value) => value.endsWith("-label"))).toBe(true);
   });
 });

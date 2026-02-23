@@ -1,20 +1,46 @@
 .ns-dialog-overlay {
   align-items: center;
   background: var(--ns-component-dialog-backdrop, #0b0e13a6);
+  backdrop-filter: blur(var(--ns-component-dialog-backdrop-blur, 2px));
   display: flex;
   inset: 0;
   justify-content: center;
+  opacity: 0;
   padding: 1.5rem;
   position: fixed;
+  transition: opacity 200ms ease;
   z-index: var(--ns-component-dialog-zIndex, 1200);
+}
+
+.ns-dialog-overlay[data-state="open"] {
+  opacity: 1;
+}
+
+.ns-dialog-overlay[data-state="closed"] {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .ns-dialog {
   background: var(--ns-component-dialog-surface, #ffffff);
   border-radius: var(--ns-component-dialog-radius, 0.75rem);
-  box-shadow: 0 16px 32px -8px #091f4533;
+  box-shadow: var(--ns-component-dialog-shadow, 0 20px 48px -16px #091f453d);
+  max-height: min(90vh, 42rem);
   max-width: 36rem;
+  opacity: 0;
+  transform: translateY(0.75rem) scale(0.98);
+  transition: opacity 200ms ease, transform 200ms ease;
   width: min(100%, 36rem);
+}
+
+.ns-dialog[data-state="open"] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.ns-dialog[data-state="closed"] {
+  opacity: 0;
+  transform: translateY(0.5rem) scale(0.98);
 }
 
 .ns-dialog-header {
@@ -26,6 +52,8 @@
 }
 
 .ns-dialog-title {
+  color: var(--ns-color-text-strong, #101828);
+  font-weight: 600;
   font-size: 1.125rem;
   margin: 0;
 }
@@ -35,9 +63,16 @@
   border: 0;
   border-radius: 0.25rem;
   cursor: pointer;
+  color: var(--ns-color-text-subtle, #475467);
   font-size: 1rem;
   height: 2rem;
+  transition: background-color 160ms ease, color 160ms ease;
   width: 2rem;
+}
+
+.ns-dialog-close:hover {
+  background: var(--ns-color-surface-muted, #f2f4f7);
+  color: var(--ns-color-text-strong, #101828);
 }
 
 .ns-dialog-close:focus-visible {
@@ -46,5 +81,32 @@
 }
 
 .ns-dialog-body {
+  color: var(--ns-color-text-default, #344054);
+  overflow: auto;
   padding: 1.25rem;
+}
+
+.ns-dialog-description {
+  color: var(--ns-color-text-subtle, #475467);
+  margin: 0 0 0.75rem;
+}
+
+@media (max-width: 40rem) {
+  .ns-dialog-overlay {
+    align-items: flex-end;
+    padding: 0.75rem;
+  }
+
+  .ns-dialog {
+    border-radius: var(--ns-component-dialog-radius-mobile, 0.875rem 0.875rem 0 0);
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ns-dialog-overlay,
+  .ns-dialog,
+  .ns-dialog-close {
+    transition: none;
+  }
 }

@@ -9,8 +9,22 @@ const meta = {
   args: {
     title: "Changes saved",
     description: "The design token set is now published.",
-    variant: "success",
+    tone: "success",
     onDismiss: fn()
+  },
+  argTypes: {
+    tone: {
+      control: "select",
+      options: ["neutral", "info", "success", "warning", "error"]
+    },
+    variant: {
+      control: "select",
+      options: ["info", "success", "warning", "error"]
+    },
+    live: {
+      control: "select",
+      options: ["polite", "assertive", "off"]
+    }
   }
 } satisfies Meta<typeof Toast>;
 
@@ -24,7 +38,7 @@ export const Warning: Story = {
   args: {
     title: "Token drift detected",
     description: "Review semantic aliases before release.",
-    variant: "warning"
+    tone: "warning"
   }
 };
 
@@ -32,7 +46,15 @@ export const Error: Story = {
   args: {
     title: "Build failed",
     description: "Fix CI checks and retry.",
-    variant: "error"
+    tone: "error"
+  }
+};
+
+export const Neutral: Story = {
+  args: {
+    title: "Maintenance complete",
+    description: "No further action is required.",
+    tone: "neutral"
   }
 };
 
@@ -40,7 +62,7 @@ export const Actionable: Story = {
   args: {
     title: "Update available",
     description: "Apply migration notes to continue.",
-    variant: "info",
+    tone: "info",
     action: {
       label: "Review",
       onClick: fn()
@@ -52,5 +74,14 @@ export const Actionable: Story = {
     await userEvent.click(canvas.getByRole("button", { name: "Dismiss notification" }));
     await expect(args.action?.onClick).toHaveBeenCalled();
     await expect(args.onDismiss).toHaveBeenCalled();
+  }
+};
+
+export const LegacyVariantCompatibility: Story = {
+  args: {
+    title: "Legacy API",
+    description: "Variant still maps to semantic toast tones.",
+    tone: undefined,
+    variant: "success"
   }
 };
